@@ -10,15 +10,15 @@
 
 ```
 
-Spacejar is a command-line tool that simplifies building, training, fine-tuning, and deploying ML models.
+🚀 Spacejar is a command-line tool that simplifies building, training, fine-tuning, and deploying ML models.
 Use one command to run your entire ML workflow, from your local environment to scalable, powerful cloud resources.
 
-No new frameworks to learn, no code changes.
+🖥️ No new frameworks to learn, no code changes.
 
 ## Installation
 
 ```bash
-pip install spacejar-cli
+pip install spacejar
 ```
 
 ## Quick Start
