@@ -1,0 +1,20 @@
+# docker/linux/x86_64/Dockerfile.test
+# Purpose: Test environment for Linux x86_64 binary
+# Usage:
+# 1. Make sure binary is built using x86_64 builder
+# 2. docker build --platform linux/amd64 -t spacejar/linux-x86_64-test -f docker/linux/x86_64/Dockerfile.test .
+# 3. docker run --rm -it spacejar/linux-x86_64-test
+
+FROM --platform=linux/amd64 ubuntu:latest
+
+# Update package lists and install basic utilities
+# Using apt-get is preferred in Dockerfiles over apt
+RUN apt-get update && apt-get install -y \
+    bash \
+    && rm -rf /var/lib/apt/lists/*  # Clean up to reduce image size
+
+WORKDIR /app
+COPY binaries/linux/x86_64-unknown-linux-musl/spacejar /usr/local/bin/
+RUN chmod +x /usr/local/bin/spacejar
+
+ENTRYPOINT ["/bin/bash"]
