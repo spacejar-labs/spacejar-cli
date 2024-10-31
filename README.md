@@ -1,14 +1,16 @@
  ```
- ____                        _                      _ _ 
-/ ___| _ __   __ _  ___ ___ (_) __ _ _ __       ___| (_)
-\___ \| '_ \ / _` |/ __/ _ \| |/ _` | '__|____ / __| | |
- ___) | |_) | (_| | (_|  __/| | (_| | | |_____| (__| | |
-|____/| .__/ \__,_|\___\___|/ |\__,_|_|        \___|_|_|
-      |_|                 |__/                          
+ ____                        _               ____ _     ___ 
+/ ___| _ __   __ _  ___ ___ (_) __ _ _ __   / ___| |   |_ _|
+\___ \| '_ \ / _` |/ __/ _ \| |/ _` | '__| | |   | |    | | 
+ ___) | |_) | (_| | (_|  __/| | (_| | |    | |___| |___ | | 
+|____/| .__/ \__,_|\___\___|/ |\__,_|_|     \____|_____|___|
+      |_|                 |__/                              
+
 ```
 
 Spacejar is a command-line tool that simplifies building, training, fine-tuning, and deploying ML models.
 Use one command to run your entire ML workflow, from your local environment to scalable, powerful cloud resources.
+
 No new frameworks to learn, no code changes.
 
 ## Installation
