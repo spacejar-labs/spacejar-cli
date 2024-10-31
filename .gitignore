@@ -1,0 +1,75 @@
+### Rust ###
+# Build artifacts
+/target/
+**/target/
+/rust/target/
+rust/binaries/
+
+### Python ###
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+*.egg
+python_package/dist/
+python_package/build/
+python_package/*.egg-info/
+
+### Development Environments ###
+# PyCharm/IntelliJ
+.idea/
+*.iml
+
+# VSCode
+.vscode/
+*.code-workspace
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Virtual environments
+venv/
+env/
+.venv/
+.python-version
+
+### macOS ###
+.DS_Store
+.AppleDouble
+.LSOverride
+
+### Windows ###
+# Windows thumbnail cache files
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+
+### Linux ###
+*~
+.directory
+
+### Project Specific ###
+# Logs
+*.log
+logs/
+
+# Local configuration
+.spacejar/
+config.local.yaml
+
+# Test coverage
+coverage/
+.coverage
+htmlcov/
+
+# Cache directories
+.cache/
+.pytest_cache/

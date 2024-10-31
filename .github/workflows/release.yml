@@ -1,0 +1,27 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  upload_release:
+    name: Create Release and Upload Assets
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          draft: false
+          prerelease: ${{ contains(github.ref_name, '-test') }}
+          generate_release_notes: false
+          files: |
+            rust/binaries/**/*.tar.gz
+            rust/binaries/**/*.zip
+            rust/binaries/**/*.sha256
+          make_latest: false
