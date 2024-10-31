@@ -10,13 +10,32 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      
-      - name: Upload Release Assets
+
+      # Delete the automatic source code assets
+      - name: Delete source assets
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          cd rust/binaries
-          for file in $(find . -type f \( -name "*.tar.gz" -o -name "*.zip" -o -name "*.sha256" \)); do
-            echo "Uploading $file..."
-            gh release upload "${{ github.event.release.tag_name }}" "$file" --clobber
+          # Delete source code assets if they exist
+          gh release view ${{ github.event.release.tag_name }} --json assets -q '.assets[].name' | \
+          grep "Source code" | \
+          while read asset; do
+            gh release delete-asset ${{ github.event.release.tag_name }} "$asset" --yes
           done
+
+      # Upload only binary assets
+      - name: Upload binaries
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.event.release.tag_name }}
+          files: |
+            rust/binaries/**/*.tar.gz
+            rust/binaries/**/*.zip
+            rust/binaries/**/*.sha256
+          draft: false
+          prerelease: ${{ contains(github.event.release.tag_name, '-test') }}
+          generate_release_notes: false
+          fail_on_unmatched_files: true
+          append_body: true
+          body: |
+            Binary releases for ${{ github.event.release.tag_name }}
