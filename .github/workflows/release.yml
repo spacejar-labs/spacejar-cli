@@ -9,19 +9,31 @@ jobs:
   upload_release:
     name: Create Release and Upload Assets
     runs-on: ubuntu-latest
+    permissions: write-all
     steps:
       - uses: actions/checkout@v2
 
       - name: Create Release
-        uses: softprops/action-gh-release@v1
+        id: create_release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          draft: false
-          prerelease: ${{ contains(github.ref_name, '-test') }}
-          generate_release_notes: false
-          files: |
-            rust/binaries/**/*.tar.gz
-            rust/binaries/**/*.zip
-            rust/binaries/**/*.sha256
-          make_latest: false
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Create release without any source attachments
+          gh release create ${{ github.ref_name }} \
+            --draft \
+            --prerelease=${{ contains(github.ref_name, '-test') }} \
+            --title "Release ${{ github.ref_name }}" \
+            --notes "Release ${{ github.ref_name }}"
+
+      - name: Upload Release Assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Change to the binaries directory
+          cd rust/binaries
+          
+          # Upload all tar.gz, zip, and sha256 files
+          for file in $(find . -type f \( -name "*.tar.gz" -o -name "*.zip" -o -name "*.sha256" \)); do
+            echo "Uploading $file..."
+            gh release upload ${{ github.ref_name }} "$file" --clobber
+          done
