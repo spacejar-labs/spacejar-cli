@@ -73,3 +73,6 @@ htmlcov/
 # Cache directories
 .cache/
 .pytest_cache/
+
+# Test PyPI
+python_package/pypi_test.md

@@ -6,7 +6,6 @@ import platform
 from pathlib import Path
 import requests
 import logging
-import site
 import tarfile
 import tempfile
 import shutil
@@ -20,18 +19,26 @@ class PostInstallCommand(install):
         install.run(self)
         self.install_binary()
     
+    def _get_package_version(self):
+        version = self.distribution.metadata.version
+        # version = version.split('.dev')[0] # Only for testing phase
+        if not version.startswith('v'):
+            version = f'v{version}'
+        return version
+    
     def install_binary(self):
         try:
             os_name, arch = self.get_system_info()
+            version = self._get_package_version()
             
             # Construct URL for compressed file based on OS
-            base_url = "https://github.com/spacejar-labs/spacejar-cli/releases/download/v0.1.0-test"
+            base_url = "https://github.com/spacejar-labs/spacejar-cli/releases/download"
             binary_name = 'spacejar.exe' if os_name == 'windows' else 'spacejar'
             
             # Use .zip for Windows, .tar.gz for Unix-like systems
             archive_ext = '.zip' if os_name == 'windows' else '.tar.gz'
-            archive_name = f"spacejar-{os_name}-{arch}{archive_ext}"
-            archive_url = f"{base_url}/{archive_name}"
+            archive_name = f"spacejar-{version}-{os_name}-{arch}{archive_ext}"
+            archive_url = f"{base_url}/{version}/{archive_name}"
             
             logger.info(f"Downloading Spacejar archive from {archive_url}")
             
@@ -199,9 +206,9 @@ class PostInstallCommand(install):
 
 setup(
     name="spacejar",
-    version="0.1.0",
+    version="0.1.2",
     description="Binary installer for Spacejar CLI",
-    packages=[''],
+    packages=find_packages(where='src'),
     package_dir={'': 'src'},
     install_requires=['requests'],
     cmdclass={
