@@ -6,33 +6,24 @@ on:
       - 'v*'
 
 jobs:
-  upload_assets:
+  upload-release-assets:
     runs-on: ubuntu-latest
-    permissions: write-all
+
     steps:
-      - uses: actions/checkout@v2
+      - name: Check out code
+        uses: actions/checkout@v4
 
-      - name: Create Release
+      - name: Upload binaries to release
         env:
-          GH_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Delete release if it exists
-          gh release delete ${{ github.ref_name }} --yes || true
-          
-          # Create new release without generating source archives
-          gh release create ${{ github.ref_name }} \
-            --title "Release ${{ github.ref_name }}" \
-            --notes "Binary release for ${{ github.ref_name }}" \
-            --prerelease=${{ contains(github.ref_name, '-test') }} \
-            --verify-tag \
-            --repo ${{ github.repository }}
+          # Retrieve the latest tag (e.g. v0.1.0)
+          TAG_NAME=$(basename "${GITHUB_REF}")
 
-      - name: Upload Assets
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          cd rust/binaries
-          find . -type f \( -name "*.tar.gz" -o -name "*.zip" -o -name "*.sha256" \) | while read file; do
-            echo "Uploading $file"
-            gh release upload ${{ github.ref_name }} "$file" --clobber
+          # Create the release if it doesn't exist
+          gh release create "$TAG_NAME" -t "$TAG_NAME" -n "Release $TAG_NAME"
+
+          # Upload the binaries to the release
+          for filepath in binaries/**/*.{tar.gz,zip}; do
+            [ -f "$filepath"] && gh release upload "$TAG_NAME" "$filepath"
           done
