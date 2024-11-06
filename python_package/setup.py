@@ -21,7 +21,6 @@ class PostInstallCommand(install):
     
     def _get_package_version(self):
         version = self.distribution.metadata.version
-        # version = version.split('.dev')[0] # Only for testing phase
         if not version.startswith('v'):
             version = f'v{version}'
         return version
