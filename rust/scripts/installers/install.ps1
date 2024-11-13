@@ -1,5 +1,3 @@
-# Install-SpaceJarCLI.ps1
-
 # Enable strict mode for better error handling
 Set-StrictMode -Version Latest
 
@@ -19,7 +17,7 @@ try {
 }
 
 # Set up install directory
-$installDir = "$env:USERPROFILE\.spacejar\bin"
+$installDir = "$env:LOCALAPPDATA\spacejar\bin"
 if (-Not (Test-Path $installDir)) {
     New-Item -ItemType Directory -Path $installDir | Out-Null
 }
@@ -49,7 +47,10 @@ try {
 $pathAddition = $installDir
 $currentPath = [Environment]::GetEnvironmentVariable("PATH", [EnvironmentVariableTarget]::User)
 if (-Not ($currentPath -split ';' | Where-Object { $_ -eq $pathAddition })) {
-    [Environment]::SetEnvironmentVariable("PATH", "$currentPath;$pathAddition", [EnvironmentVariableTarget]::User)
+    $newPath = "$currentPath;$pathAddition"
+    # Update both persistent and current session
+    [Environment]::SetEnvironmentVariable("PATH", $newPath, [EnvironmentVariableTarget]::User)
+    $env:PATH = [Environment]::GetEnvironmentVariable("PATH", [EnvironmentVariableTarget]::User)
     Write-Host "Added $installDir to PATH." -ForegroundColor Green
 }
 
@@ -62,5 +63,3 @@ try {
 } catch {
     Write-Host "Failed to verify installation." -ForegroundColor Red
 }
-
-Write-Host "Please restart your terminal to use SpaceJar CLI." -ForegroundColor Green
