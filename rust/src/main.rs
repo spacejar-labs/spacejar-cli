@@ -1,49 +1,58 @@
-use clap::{Parser, Command};
+use clap::{Command, Parser, Subcommand};
+use config::*;
 use spacejar::*;
 use std::{env, process};
-use config::*;
 
 #[derive(Parser, Debug)]
-#[command(author, version, about, long_about = None)]
-struct CliArgs {
-      #[arg(short, long)]
-      logo: bool,
+#[command(
+    name = "spacejar",
+    version,
+    author = "Spacejar engineers engineers@spacejar.io",
+    about = "Run your code from your local setup on our cloud with one command",
+    long_about = "Train, fine-tune, and deploy ML models from your local environment on our powerful machines. No setup, no new framework to learn, no code changes."
+)]
+struct Cli {
+    #[command(subcommand)]
+    command: Commands,
+}
 
-      #[arg(
-            short,
-            long,
-            num_args(0..),
-            allow_hyphen_values(true),
-            required(true),
-            value_name("COMMAND"),
-            help = "The command to run, i.e. spacejar --run python my_script.py --my-params",
-      )]
-      run: Vec<String>,
+#[derive(Subcommand, Debug)]
+enum Commands {
+    Run {
+        #[arg(allow_hyphen_values(true), num_args(1..), value_name("COMMAND"))]
+        args: Vec<String>,
+    },
+
+    Logo,
 }
 
 fn main() {
-      let args = CliArgs::parse();
+    let cli = Cli::parse();
 
-      match args.logo {
-            true => spacejar::print_logo(),
-            false => (),
-      }
+    match &cli.command {
+        Commands::Run { args } => {
+            if args.is_empty() {
+                eprintln!("You must specify a command to run. i.e. spacejar run python my_script.py --my-params");
+                process::exit(1);
+            }
 
-      if args.run.is_empty() {
-            eprintln!("You must specify a command to run. i.e. spacejar --run python my_script.py --my-params");
-            process::exit(1);
-      }
-
-      // Check if there is a file in the current directory a spacejar_config.yml
-      let current_dir = get_current_dir();
-      if !config_file_exists(&current_dir) {
-            println!("Creating a new config file in {}", current_dir.display());
-            match create_default_config() {
-                  Ok(_) => println!("Config file created successfully"),
-                  Err(e) => {
+            let current_dir = get_current_dir();
+            if !config_file_exists(&current_dir) {
+                println!("Creating a new config file in {}", current_dir.display());
+                match create_default_config(&current_dir) {
+                    Ok(_) => println!("Config file created successfully"),
+                    Err(e) => {
                         eprintln!("Error creating config file: {}", e);
                         process::exit(1);
-                  }
+                    }
+                }
             }
-      }
+
+            // TODO: Execute the run command
+            println!("Running command: {:?}", args);
+        },
+        Commands::Logo => {
+            spacejar::print_logo();
+        }
+    }
 }

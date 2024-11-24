@@ -176,8 +176,8 @@ impl ConfigManifest {
     }
 }
 
-pub fn config_file_exists(current_dir: &PathBuf) -> bool {
-    current_dir.join("spacejar_config.yml").exists()
+pub fn config_file_exists(dir: &PathBuf) -> bool {
+    dir.join("spacejar_config.yml").exists()
 }
 
 pub fn get_current_dir() -> PathBuf {
@@ -187,8 +187,8 @@ pub fn get_current_dir() -> PathBuf {
     }
 }
 
-pub fn create_default_config() -> Result<(), Box<dyn std::error::Error>> {
-    let current_dir = std::env::current_dir()?;
+pub fn create_default_config(dir: &PathBuf) -> Result<(), Box<dyn std::error::Error>> {
+    let current_dir = dir;
     let config_file = current_dir.join("spacejar_config.yml");
 
     let config = ConfigManifest::new_default();
@@ -197,4 +197,3 @@ pub fn create_default_config() -> Result<(), Box<dyn std::error::Error>> {
 
     Ok(())
 }
-
