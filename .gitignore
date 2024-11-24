@@ -76,3 +76,6 @@ htmlcov/
 
 # Test PyPI
 python_package/pypi_test.md
+
+# Repomix
+repomix*
