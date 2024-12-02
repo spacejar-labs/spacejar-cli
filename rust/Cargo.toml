@@ -3,7 +3,21 @@ name = "spacejar"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[workspace]
+members = [
+    "crates/cli",
+    "crates/executor",
+    "crates/vcs",
+    "crates/file_system",
+    "crates/file_watcher",
+    "crates/dependency_manager",
+    "crates/remote",
+    "crates/secrets",
+    "crates/system_provisioner",
+    "crates/logger",
+    "crates/job_manager",
+    "crates/config",
+]
 
 [dependencies]
 clap = { version = "4.5.21", features = ["derive"] }

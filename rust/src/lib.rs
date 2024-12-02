@@ -14,3 +14,8 @@ pub fn print_logo() {
    
    "#);
 }
+
+pub fn get_os() -> String {
+    let os = std::env::consts::OS;
+    os.to_string()
+}

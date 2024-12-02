@@ -36,6 +36,7 @@ fn main() {
                 process::exit(1);
             }
 
+            // Check if config file exists
             let current_dir = get_current_dir();
             if !config_file_exists(&current_dir) {
                 println!("Creating a new config file in {}", current_dir.display());
@@ -47,10 +48,7 @@ fn main() {
                     }
                 }
             }
-
-            // TODO: Execute the run command
-            println!("Running command: {:?}", args);
-        },
+        }
         Commands::Logo => {
             spacejar::print_logo();
         }
