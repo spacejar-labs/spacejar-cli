@@ -2,7 +2,6 @@
 # Build artifacts
 /target/
 **/target/
-/rust/target/
 rust/binaries/
 
 ### Python ###
