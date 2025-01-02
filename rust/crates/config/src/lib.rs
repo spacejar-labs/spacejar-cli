@@ -2,7 +2,7 @@ use serde::{Serialize, Deserialize};
 use std::fs;
 use std::path::PathBuf;
 use std::env;
-use std::process;
+use anyhow::Result;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Hardware {
@@ -167,7 +167,7 @@ impl ConfigManifest {
         }
     }
 
-    pub fn save_to_file(&self, path: &PathBuf) -> Result<(), Box<dyn std::error::Error>> {
+    pub fn save_to_file(&self, path: &PathBuf) -> Result<()> {
         let yaml = serde_yaml::to_string(&self)?;
         fs::write(path, yaml)?;
 
@@ -179,19 +179,15 @@ pub fn config_file_exists(dir: &PathBuf) -> bool {
     dir.join("spacejar_config.yml").exists()
 }
 
-pub fn get_current_dir() -> PathBuf {
-    match env::current_dir() {
-        Ok(dir) => dir,
-        Err(e) => process::exit(1),
-    }
+pub fn get_current_dir() -> Result<PathBuf> {
+    env::current_dir().map_err(|e| anyhow::anyhow!("Failed to get current directory: {}", e))
 }
 
-pub fn create_default_config(dir: &PathBuf) -> Result<(), Box<dyn std::error::Error>> {
+pub fn create_default_config(dir: &PathBuf) -> Result<()> {
     let current_dir = dir;
     let config_file = current_dir.join("spacejar_config.yml");
 
     let config = ConfigManifest::new_default();
-
     config.save_to_file(&config_file)?;
 
     Ok(())
