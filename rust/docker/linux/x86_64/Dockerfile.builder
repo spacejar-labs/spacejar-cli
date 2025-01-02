@@ -4,6 +4,7 @@
 # docker run --rm \
 #   --platform linux/amd64 \
 #   -v "$(pwd)/src:/usr/src/app/src" \
+#   -v "$(pwd)/crates:/usr/src/app/crates" \
 #   -v "$(pwd)/Cargo.toml:/usr/src/app/Cargo.toml" \
 #   -v "$(pwd)/Cargo.lock:/usr/src/app/Cargo.lock" \
 #   -v "$(pwd)/version.txt:/usr/src/app/version.txt" \

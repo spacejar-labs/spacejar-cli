@@ -3,7 +3,6 @@ use std::fs;
 use std::path::PathBuf;
 use std::env;
 use std::process;
-use std::fs::File;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Hardware {

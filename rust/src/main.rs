@@ -1,7 +1,6 @@
-use clap::{Command, Parser, Subcommand};
-use config::*;
-use spacejar::*;
-use std::{env, process};
+use clap::{Parser, Subcommand};
+use spacejar_config::*;
+use std::process;
 
 #[derive(Parser, Debug)]
 #[command(
@@ -21,9 +20,7 @@ enum Commands {
     Run {
         #[arg(allow_hyphen_values(true), num_args(1..), value_name("COMMAND"))]
         args: Vec<String>,
-    },
-
-    Logo,
+    }
 }
 
 fn main() {
@@ -48,9 +45,6 @@ fn main() {
                     }
                 }
             }
-        }
-        Commands::Logo => {
-            spacejar::print_logo();
         }
     }
 }
